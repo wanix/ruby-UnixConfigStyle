@@ -19,10 +19,10 @@ class UnixConfigStyle
   #Section Line definition
   @@regexpStruct[:sectionline] = /^\s*\[(.+?)\]\s*([#;].*)?$/
   #Parameter line definition
-  @@regexpStruct[:paramline] = /^\s*([\d\w-_]+)\s*=.*$/
-  @@regexpStruct[:paramlinequote] = /^\s*([\d\w-_]+)\s*=\s*('.*')\s*([#;].*)?$/
-  @@regexpStruct[:paramline2quote] = /^\s*([\d\w-_]+)\s*=\s*(".*")\s*([#;].*)?$/
-  @@regexpStruct[:paramlinenormal] = /^\s*([\d\w-_]+)\s*=\s*(.*?)\s*([#;].*)?$/
+  @@regexpStruct[:paramline] = /^\s*([\d\w\-_]+)\s*=.*$/
+  @@regexpStruct[:paramlinequote] = /^\s*([\d\w\-_]+)\s*=\s*('.*')\s*([#;].*)?$/
+  @@regexpStruct[:paramline2quote] = /^\s*([\d\w\-_]+)\s*=\s*(".*")\s*([#;].*)?$/
+  @@regexpStruct[:paramlinenormal] = /^\s*([\d\w\-_]+)\s*=\s*(.*?)\s*([#;].*)?$/
 
   #(private) Initialise the class and read the file
   #Parameters:
@@ -133,18 +133,19 @@ class UnixConfigStyle
   #Parameters:
   # fileToWrite : String, path to a file
   # comment: String (optionnal)
-  # TODO
-  #def write (fileToWrite, comment=nil)
-  #  File.open(fileToWrite, 'w') do |file|
-  #    self.print (comment, file.to_io)
-  #  end
-  #end #def write
+  def write (fileToWrite, comment=nil)
+    File.open(fileToWrite,'w') do |file|
+      self.print(comment, file)
+    end
+  end #def write
 
   #Print the object in a unix config style into an IO obj
   #Parameters:
   # comment: String
   # io_obj : IO (default stdout)
   def print (comment=nil, io_obj=$stdout)
+    raise ArgumentError, 'the argument "comment" must be a String' unless (comment.is_a? String or comment == nil)
+    raise ArgumentError, 'the argument "io_obj" must be an IO class or an IO inherited class' unless io_obj.is_a? IO
     if comment
       io_obj.puts "##{comment}"
     end

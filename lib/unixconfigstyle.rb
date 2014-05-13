@@ -330,4 +330,28 @@ class UnixConfigStyle
     return nil
   end #replaceValues
 
+  #Return true if at list one key is present
+  def haveKeys? (section=@@rootsection)
+    return false if @sections.empty?
+    return true unless @sections[section].empty?
+    return false
+  end #haveKeys?
+
+  #Return true if at list one section is present
+  def haveSections? ()
+    return true unless self.getSections().empty?
+    return false
+  end #haveSections?
+
+  #Return true if at list one key is found, whatever its section, global or not
+  def isEmpty?()
+    return true if self.haveKeys?
+    if self.haveSections?
+      self.getSections().each do |section|
+        return true if self.haveKeys?(section)
+      end
+    end
+    return false
+  end #isEmpty?()
+
 end

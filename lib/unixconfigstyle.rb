@@ -259,4 +259,75 @@ class UnixConfigStyle
     return nil
   end #getLastValue
 
+  #Get the value with the given index for a key
+  #Parameters:
+  # key: String
+  # index :Integer (default 0)
+  # section: String (optionnal)
+  def getValue (key, index=0, section=@@rootsection)
+    if @sections.key?(section)
+      if @sections[section].key?(key)
+        return @sections[section][key][index]
+      end
+    end
+    return nil
+  end #getValue
+
+  #Replace the first value by the given one
+  #Parameters:
+  # newvalue : string
+  # key: String
+  # section: String (optionnal)
+  def replaceFirstValue (newvalue, key, section=@@rootsection)
+    if @sections.key?(section)
+      if @sections[section].key?(key)
+        @sections[section][key].first.replace(newvalue)
+      end
+    end
+    return nil
+  end #replaceFirstValue
+
+  #Replace the last value by the given one
+  #Parameters:
+  # newvalue : string
+  # key: String
+  # section: String (optionnal)
+  def replaceLastValue (newvalue, key, section=@@rootsection)
+    if @sections.key?(section)
+      if @sections[section].key?(key)
+        @sections[section][key].last.replace(newvalue)
+      end
+    end
+    return nil
+  end #replaceLastValue
+
+  #Replace the value by the given one
+  #Parameters:
+  # newvalue : string
+  # key: String
+  # index :Integer (default 0)
+  # section: String (optionnal)
+  def replaceValue (newvalue, key, index=0, section=@@rootsection)
+    if @sections.key?(section)
+      if @sections[section].key?(key)
+        @sections[section][key][index].replace(newvalue)
+      end
+    end
+    return nil
+  end #replaceValue
+
+  #Replace all the value array by the given one
+   #Parameters:
+  # newvalues : Array
+  # key: String
+  # section: String (optionnal)
+  def replaceValues (newvalues, key, section=@@rootsection)
+    if @sections.key?(section)
+      if @sections[section].key?(key)
+        @sections[section][key].replace(newvalues)
+      end
+    end
+    return nil
+  end #replaceValues
+
 end

@@ -343,15 +343,15 @@ class UnixConfigStyle
     return false
   end #haveSections?
 
-  #Return true if at list one key is found, whatever its section, global or not
+  #Return false if at list one key is found, whatever its section, global or not
   def isEmpty?()
-    return true if self.haveKeys?
+    return false if self.haveKeys?
     if self.haveSections?
       self.getSections().each do |section|
-        return true if self.haveKeys?(section)
+        return false if self.haveKeys?(section)
       end
     end
-    return false
+    return true
   end #isEmpty?()
 
 end

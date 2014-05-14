@@ -190,6 +190,30 @@ class UnixConfigStyle
     return nil
   end #def getKeys
 
+  #Get all differents keys in the object
+  # if section is defined, return a merged array for keys in the section and keys in root section
+  # if section is not defined, return a a merged array for all keys in the object
+  #return an array (or nil if no keys found)
+  def getAllKeys (section=nil)
+    allKeys=[]
+    #Get keys from root section
+    allKeys.push(@sections[@@rootsection].keys) if @sections.key?(@@rootsection)
+    if ( section == nil )
+      #Get keys from the others sections if exists and are not empty
+      if self.haveSections?()
+        self.getSections().each do |subsection|
+          allKeys.push(@sections[subsection].keys) if @sections.key?(subsection)
+        end
+      end
+    else
+      #get keys for this specific section
+      allKeys.push(@sections[section].keys) if self.sectionExists?(section)
+    end
+    return nil if allKeys.empty?()
+    allKeys.uniq!
+    return allKeys
+  end #getAllKeys
+
   #Add values for a key
   #Parameters:
   # values: Array or String
@@ -224,13 +248,16 @@ class UnixConfigStyle
   #Parameters:
   # key: String
   # section: String (optionnal)
-  def getValues (key, section=@@rootsection)
-    if @sections.key?(section)
-      if @sections[section].key?(key)
-        return @sections[section][key]
-      end
+  # globalSearch: boolean, if true, insert the results from the root section (default false)
+  def getValues (key, section=@@rootsection, globalSearch=false)
+    resultArray=[]
+    if (globalSearch == true and section != @@rootsection)
+      #We put first the result form the root section
+      resultArray.push(@sections[@@rootsection][key]) if ( @sections.key?(@@rootsection) and @sections[@@rootsection].key?(key) )
     end
-    return nil
+    resultArray.push(@sections[section][key]) if ( @sections.key?(section) and @sections[section].key?(key) )
+    return nil if resultArray.empty?()
+    return resultArray
   end #getValues
 
   #Get the first value for a key (config first win)
@@ -330,6 +357,34 @@ class UnixConfigStyle
     return nil
   end #replaceValues
 
+  #Return true if the key exists for the section "section"
+  #if global search is set to true, return true if the key exists in the root section and not in the section itself
+  #Parameters:
+  # key : string, the key to search
+  # section: string, the section where to search the key (default the root one)
+  # globalSearch: boolean, if the section is not the root one, return true if the key is found in the root section even if it not exists in the given section
+  def keyExists?(key, section, globalSearch=false)
+    return false if @sections.empty?
+    if ( section == nil)
+      return false unless @sections.has_key?(@@rootsection)
+      return @sections[@@rootsection].has_key?(key)
+    else
+      return false unless @sections.has_key?(section)
+      if (globalSearch == true and @sections.has_key?(@@rootsection))
+        return ( @sections[section].has_key?(key) || @sections[@@rootsection].has_key?(key) )
+      else
+        return @sections[section].has_key?(key)
+      end
+    end
+  end
+
+  #Return true if the specific section is found
+  def sectionExists? (section)
+    return false if section == nil
+    return false if @sections.empty?
+    return @sections.has_key?(section)
+  end
+
   #Return true if at list one key is present
   def haveKeys? (section=@@rootsection)
     return false if @sections.empty?
@@ -354,4 +409,8 @@ class UnixConfigStyle
     return true
   end #isEmpty?()
 
+  #Return the root section name (for loops with sections?)
+  def getRootSectionName
+    return @@rootsection
+  end
 end

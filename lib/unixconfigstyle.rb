@@ -197,17 +197,17 @@ class UnixConfigStyle
   def getAllKeys (section=nil)
     allKeys=[]
     #Get keys from root section
-    allKeys.push(@sections[@@rootsection].keys) if @sections.key?(@@rootsection)
+    allKeys.concat(@sections[@@rootsection].keys) if @sections.key?(@@rootsection)
     if ( section == nil )
       #Get keys from the others sections if exists and are not empty
       if self.haveSections?()
         self.getSections().each do |subsection|
-          allKeys.push(@sections[subsection].keys) if @sections.key?(subsection)
+          allKeys.concat(@sections[subsection].keys) if @sections.key?(subsection)
         end
       end
     else
       #get keys for this specific section
-      allKeys.push(@sections[section].keys) if self.sectionExists?(section)
+      allKeys.concat(@sections[section].keys) if self.sectionExists?(section)
     end
     return nil if allKeys.empty?()
     allKeys.uniq!
@@ -222,7 +222,7 @@ class UnixConfigStyle
   def addValues (values, key, section=@@rootsection)
     @sections[section]={} unless @sections.key?(section)
     @sections[section][key]=[] unless @sections[section].key?(key)
-    if @sections[section][key].push(values)
+    if @sections[section][key].concat(values)
       return true
     else
       return false
@@ -253,9 +253,9 @@ class UnixConfigStyle
     resultArray=[]
     if (globalSearch == true and section != @@rootsection)
       #We put first the result form the root section
-      resultArray.push(@sections[@@rootsection][key]) if ( @sections.key?(@@rootsection) and @sections[@@rootsection].key?(key) )
+      resultArray.concat(@sections[@@rootsection][key]) if ( @sections.key?(@@rootsection) and @sections[@@rootsection].key?(key) )
     end
-    resultArray.push(@sections[section][key]) if ( @sections.key?(section) and @sections[section].key?(key) )
+    resultArray.concat(@sections[section][key]) if ( @sections.key?(section) and @sections[section].key?(key) )
     return nil if resultArray.empty?()
     return resultArray
   end #getValues

@@ -222,11 +222,13 @@ class UnixConfigStyle
   def addValues (values, key, section=@@rootsection)
     @sections[section]={} unless @sections.key?(section)
     @sections[section][key]=[] unless @sections[section].key?(key)
-    if @sections[section][key].concat(values)
-      return true
+    if values.is_a? Array
+      return true if @sections[section][key].concat(values)
     else
-      return false
+      #String
+      return true if @sections[section][key].push(values)
     end
+    return false
   end #def addValues
 
   #Insert values for a key

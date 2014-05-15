@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name        = 'unixconfigstyle'
-  spec.version     = '1.0.0.pre'
+  spec.version     = '1.0.0'
   spec.date        = '2014-05-15'
   spec.summary     = "Parse, Write and manage config files in Unix Format"
   spec.description = <<-EOF

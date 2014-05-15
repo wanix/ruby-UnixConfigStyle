@@ -19,10 +19,10 @@ class UnixConfigStyle
   #Section Line definition
   @@regexpStruct[:sectionline] = /^\s*\[(.+?)\]\s*([#;].*)?$/
   #Parameter line definition
-  @@regexpStruct[:paramline] = /^\s*([\d\w\-_]+)\s*=.*$/
-  @@regexpStruct[:paramlinequote] = /^\s*([\d\w\-_]+)\s*=\s*('.*')\s*([#;].*)?$/
-  @@regexpStruct[:paramline2quote] = /^\s*([\d\w\-_]+)\s*=\s*(".*")\s*([#;].*)?$/
-  @@regexpStruct[:paramlinenormal] = /^\s*([\d\w\-_]+)\s*=\s*(.*?)\s*([#;].*)?$/
+  @@regexpStruct[:paramline] = /^\s*([\d\w\-]+)\s*=.*$/
+  @@regexpStruct[:paramlinequote] = /^\s*([\d\w\-]+)\s*=\s*('.*')\s*([#;].*)?$/
+  @@regexpStruct[:paramline2quote] = /^\s*([\d\w\-]+)\s*=\s*(".*")\s*([#;].*)?$/
+  @@regexpStruct[:paramlinenormal] = /^\s*([\d\w\-]+)\s*=\s*(.*?)\s*([#;].*)?$/
 
   #(private) Initialise the class and read the file
   #Parameters:
